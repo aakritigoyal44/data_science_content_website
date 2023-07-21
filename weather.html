@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Weather App</h1>
+      <input type="text" id="search" placeholder="Enter location">
+      <button onclick="searchWeather()">Search</button>
+      <div id="weather"></div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
+
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 2em;
+  }
+  
+  input[type="text"], button {
+    font-size: 1.2em;
+    padding: 10px;
+    margin: 10px;
+  }
+  
+  #weather {
+    font-size: 1.5em;
+    margin-top: 30px;
+  }
+
+  
+  const apiKey = 'YOUR_API_KEY';
+
+function searchWeather() {
+  const location = document.getElementById('search').value;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=kurukshetra}`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      const weather = {
+        city: data.name,
+        temperature: data.main.temp,
+        humidity: data.main.humidity,
+        windSpeed: data.wind.speed,
+        description: data.weather[0].description
+      };
+      displayWeather(weather);
+    })
+    .catch(error => console.error(error));
+}
+
+function displayWeather(weather) {
+  const weatherDiv = document.getElementById('weather');
+  weatherDiv.innerHTML = `
+    <h2>${weather.city}</h2>
+    <p>Temperature: ${weather.temperature} K</p>
+    <p>Humidity: ${weather.humidity}%</p>
+    <p>Wind Speed: ${weather.windSpeed} m/s</p>
+    <p>Description: ${weather.description}</p>
+  `;
+}

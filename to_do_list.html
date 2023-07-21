@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>To-Do List App</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+
+      form {
+        margin-bottom: 20px;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      li {
+        cursor: pointer;
+        padding: 5px 10px;
+        border: 1px solid black;
+        margin-bottom: 5px;
+      }
+
+      li.new {
+        background-color: pink;
+      }
+
+      .due-date {
+        font-style: italic;
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>To-Do List App</h1>
+    <form>
+      <label for="new-task">Add new task:</label>
+      <input type="text" id="new-task" name="new-task">
+      <label for="due-date">Due date:</label>
+      <input type="date" id="due-date" name="due-date">
+      <button type="submit">Add</button>
+    </form>
+    <ul id="task-list"></ul>
+    <script>
+      const taskList = [];
+
+      function updateList() {
+        const taskListElement = document.getElementById("task-list");
+        taskListElement.innerHTML = "";
+        taskList.forEach(task => {
+          const taskElement = document.createElement("li");
+          taskElement.textContent = task.title;
+          taskElement.classList.add("new"); // add class to the new task
+          if (task.dueDate) {
+            const dueDateElement = document.createElement("span");
+            dueDateElement.classList.add("due-date");
+            dueDateElement.textContent = task.dueDate;
+            taskElement.appendChild(dueDateElement);
+          }
+          taskElement.addEventListener("click", () => {
+            const index = taskList.indexOf(task);
+            taskList.splice(index, 1);
+            updateList();
+          });
+          taskListElement.appendChild(taskElement);
+        });
+      }
+
+      document.querySelector("form").addEventListener("submit", event => {
+        event.preventDefault();
+        const newTask = {
+          title: document.getElementById("new-task").value,
+          dueDate: document.getElementById("due-date").value
+        };
+        taskList.push(newTask);
+        document.getElementById("new-task").value = "";
+        document.getElementById("due-date").value = "";
+        updateList();
+      });
+
+      updateList();
+    </script>
+  </body>
+</html>
